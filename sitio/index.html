@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combinaciones y Permutaciones Interactivas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+            showMathMenu: false,
+            messageStyle: "none"
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #4b0082;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-left: 5px solid #4b0082;
+            background-color: #f8f8ff;
+            border-radius: 5px;
+        }
+        .formula, .result, .difference, .factorial, .example {
+            background-color: #e6e6fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .result {
+            color: #4a148c;
+            font-weight: bold;
+        }
+        .fun-fact {
+            background-color: #e8f5e9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            color: #1b5e20;
+            border-left: 5px solid #4caf50;
+        }
+        .quiz {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            border: 2px solid #ffd54f;
+        }
+        .btn {
+            background-color: #4b0082;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #3a006f;
+        }
+        .feedback {
+            margin-top: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .correct {
+            color: #4caf50;
+        }
+        .incorrect {
+            color: #f44336;
+        }
+        .question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .detailed-feedback {
+            margin-top: 10px;
+        }
+        .detailed-feedback li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¡Aprendiendo Combinaciones y Permutaciones!</h1>
+        <div id="app"></div>
+    </div>
+
+    <script type="text/javascript">
+        const e=React.createElement;class App extends React.Component{constructor(t){super(t),this.state={quizStarted:!1,currentProblem:null,userAnswers:{},feedback:null,detailedFeedback: null, score:0,totalQuestions:0}}generateProblem(){const t=["combination","permutation"],s=t[Math.floor(Math.random()*t.length)],a=Math.floor(10*Math.random())+5,o=Math.floor(Math.random()*(a-1))+1;let n,r;if("combination"===s){const t=["libros","colores","sabores de helado","películas","canciones"],s=t[Math.floor(Math.random()*t.length)];n=`Tienes ${a} ${s} diferentes y quieres elegir ${o}.`,r="¿De cuántas formas diferentes puedes hacer la selección?"}else{const t=["una carrera","un concurso de talentos","un torneo de ajedrez","una competencia de cocina"],s=t[Math.floor(Math.random()*t.length)];n=`En ${s} con ${a} participantes, se otorgarán premios a los primeros ${o} lugares.`,r="¿De cuántas formas diferentes se pueden asignar los premios?"}this.setState({currentProblem:{type:s,n:a,r:o,scenario:n,question:r},userAnswers:{},feedback:null, detailedFeedback: null})}handleAnswerChange(t,s){this.setState(a=>({userAnswers:{...a.userAnswers,[t]:s}}))}calculateResult(t,s,a){const o=t=>{let s=1;for(let a=2;a<=t;a++)s*=a;return s};return"combination"===t?o(s)/(o(a)*o(s-a)):o(s)/o(s-a)}checkAnswers(){const{type:t,n:s,r:a}=this.state.currentProblem,o=this.calculateResult(t,s,a),n=this.state.userAnswers.type===t&&this.state.userAnswers.formula===("combination"===t?"C(n,r)":"P(n,r)")&&parseInt(this.state.userAnswers.n)===s&&parseInt(this.state.userAnswers.r)===a&&parseInt(this.state.userAnswers.result)===o;
+
+        const detailedFeedback = [];
+        if (this.state.userAnswers.type !== t) {
+            detailedFeedback.push(`Tipo incorrecto: la respuesta correcta es ${t === 'combination' ? 'Combinación' : 'Permutación'}.`);
+        }
+        if (this.state.userAnswers.formula !== (t === "combination" ? "C(n,r)" : "P(n,r)")) {
+            detailedFeedback.push(`Fórmula incorrecta: la fórmula correcta es ${t === 'combination' ? 'C(n,r)' : 'P(n,r)'}.`);
+        }
+        if (parseInt(this.state.userAnswers.n) !== s) {
+            detailedFeedback.push(`Valor de 'n' incorrecto: el valor correcto es ${s}.`);
+        }
+        if (parseInt(this.state.userAnswers.r) !== a) {
+            detailedFeedback.push(`Valor de 'r' incorrecto: el valor correcto es ${a}.`);
+        }
+        if (parseInt(this.state.userAnswers.result) !== o) {
+            detailedFeedback.push(`Resultado incorrecto: el resultado correcto es ${o}.`);
+        }
+
+        this.setState(t=>({
+            feedback:n,
+            detailedFeedback: n ? null : detailedFeedback,
+            score:n?t.score+1:t.score,
+            totalQuestions:t.totalQuestions+1
+        }))}startQuiz(){this.setState({quizStarted:!0,score:0,totalQuestions:0}),this.generateProblem()}render(){return this.state.quizStarted?e("div",{className:"quiz"},e("h2",null,"Cuestionario Interactivo"),this.state.currentProblem&&e("div",null,e("div",{className:"question"},e("p",null,this.state.currentProblem.scenario),e("p",null,this.state.currentProblem.question)),e("div",{className:"question"},e("label",null,"¿Es combinación o permutación?",e("select",{value:this.state.userAnswers.type||"",onChange:t=>this.handleAnswerChange("type",t.target.value)},e("option",{value:""},"Selecciona..."),e("option",{value:"combination"},"Combinación"),e("option",{value:"permutation"},"Permutación")))),e("div",{className:"question"},e("label",null,"¿Qué fórmula usarías?",e("select",{value:this.state.userAnswers.formula||"",onChange:t=>this.handleAnswerChange("formula",t.target.value)},e("option",{value:""},"Selecciona..."),e("option",{value:"C(n,r)"},"C(n,r)"),e("option",{value:"P(n,r)"},"P(n,r)")))),e("div",{className:"question"},e("label",null,"Valor de n:",e("input",{type:"number",value:this.state.userAnswers.n||"",onChange:t=>this.handleAnswerChange("n",t.target.value)}))),e("div",{className:"question"},e("label",null,"Valor de r:",e("input",{type:"number",value:this.state.userAnswers.r||"",onChange:t=>this.handleAnswerChange("r",t.target.value)}))),e("div",{className:"question"},e("label",null,"Resultado:",e("input",{type:"number",value:this.state.userAnswers.result||"",onChange:t=>this.handleAnswerChange("result",t.target.value)}))),e("button",{className:"btn",onClick:()=>this.checkAnswers()},"Verificar Respuestas"),null!==this.state.feedback&&e("p",{className:`feedback ${this.state.feedback?"correct":"incorrect"}`},this.state.feedback?"¡Correcto! ¡Buen trabajo!":"Incorrecto. Intenta de nuevo."),this.state.detailedFeedback && e("ul", { className: "detailed-feedback" }, this.state.detailedFeedback.map((item, index) => e("li", { key: index }, item))),e("button",{className:"btn",onClick:()=>this.generateProblem()},"Nuevo Problema"),e("p",null,"Puntuación: ",this.state.score," / ",this.state.totalQuestions))):e("div",null,e("div",{className:"section"},e("h2",null,"Fórmulas"),e("div",{className:"formula"},e("p",null,"Combinación: $C(n,r) = \\frac{n!}{r!(n-r)!}$"),e("p",null,"Permutación: $P(n,r) = \\frac{n!}{(n-r)!}$"))),e("div",{className:"section"},e("h2",null,"Ejemplos"),e("div",{className:"example"},e("h3",null,"Ejemplo de Combinación"),e("p",null,"Tienes 5 sabores de helado diferentes y quieres elegir 2 para un cono doble. ¿De cuántas maneras puedes hacerlo?"),e("p",null,"Solución: Usamos la fórmula de combinación: C(5,2) = 5! / (2! * 3!) = 10. Hay 10 maneras diferentes de elegir 2 sabores de 5."),),e("div",{className:"example"},e("h3",null,"Ejemplo de Permutación"),e("p",null,"En una carrera con 4 corredores, ¿de cuántas maneras pueden terminar en primer, segundo y tercer lugar?"),e("p",null,"Solución: Usamos la fórmula de permutación: P(4,3) = 4! / (4-3)! = 24. Hay 24 posibles órdenes de llegada."),)),e("div",{className:"section"},e("h2",null,"¿Cuál es la Diferencia?"),e("div",{className:"difference"},e("p",null,e("strong",null,"Permutaciones")," se usan cuando el ",e("strong",null,"orden importa"),". Ejemplo: asignar premios (primer y segundo lugar)."),e("p",null,e("strong",null,"Combinaciones")," se usan cuando el ",e("strong",null,"orden no importa"),". Ejemplo: elegir equipos de ejercicio (no importa el orden en que los usas)."))),e("div",{className:"section"},e("h2",null,"¡Entendiendo el Factorial!"),e("div",{className:"factorial"},e("p",null,"El ",e("strong",null,"factorial")," de un número ",e("em",null,"n")," (escrito como ",e("em",null,"n!")," es el producto de todos los números enteros positivos desde ",e("em",null,"1")," hasta ",e("em",null,"n"),"."),e("p",null,e("strong",null,"Ejemplo:")," $4! = 4 \\times 3 \\times 2 \\times 1 = 24$"),e("p",null,"Es como contar cuántas formas hay de ordenar ",e("em",null,"n")," cosas."))),e("div",{className:"fun-fact"},e("h3",null,"Dato Curioso"),e("p",null,"¿Sabías que las combinaciones y permutaciones son súper útiles en la vida diaria? ¡Desde elegir tu outfit hasta planificar un viaje, estás usando matemáticas sin darte cuenta!")),e("button",{className:"btn",onClick:()=>this.startQuiz()},"Comenzar Cuestionario"))}}ReactDOM.render(e(App),document.getElementById("app"));
+    </script>
+</body>
+</html>
